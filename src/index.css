@@ -1,0 +1,33 @@
+/* Tema claro por defecto */
+:root {
+  --bg: #f9fafb;
+  --text-color: #1f2937;
+  --text-secondary: #4b5563;
+  --header-bg: #ffffff;
+  --border-color: #d1d5db;
+  --hover-bg: #f3f4f6;
+}
+
+/* Tema oscuro */
+.dark {
+  --bg: #0f172a;
+  --text-color: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --header-bg: #1e293b;
+  --border-color: #334155;
+  --hover-bg: #334155;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page {
+  margin-top: 80px;
+  padding: 2rem;
+  text-align: center;
+}
