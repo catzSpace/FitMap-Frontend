@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./css/Header.css";
+import ThemeButton from "./ThemeButton";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
+  
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const html = document.documentElement;
-    if (darkMode) {
-      html.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      html.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
+  const homeLink = () =>{
+      navigate('/');
+  }
 
-  // Cierra el menú al cambiar tamaño o navegar
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768) setMenuOpen(false);
@@ -28,7 +23,6 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-content">
-        {/* Botón menú hamburguesa (solo en móviles) */}
         <button
           className="menu-toggle"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -37,29 +31,20 @@ const Header = () => {
           ☰
         </button>
 
-        <img src="/public/logo.png" className="logoImg" alt="" />
+        <img src="/public/logo.png" className="logoImg" alt="logo" 
+          onClick={() => homeLink()}
+        />
 
         <div className="desktop-items">
-          <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? "☀️" : "🌑"}
-          </button>
-          <a href="/mapa" className="login-link">Iniciar Sesión</a>
+          <ThemeButton claro="☀️" oscuro="🌑"/>
+          <a href="/login" className="login-link">Iniciar Sesión</a>
         </div>
       </div>
 
-      {/* Menú desplegable móvil */}
       {menuOpen && (
         <div className="mobile-menu">
-          <a href="/mapa" onClick={() => setMenuOpen(false)}>Iniciar Sesión</a>
-          <button
-            className="theme-toggle"
-            onClick={() => {
-              setDarkMode(!darkMode);
-              setMenuOpen(false);
-            }}
-          >
-            {darkMode ? "☀️ Claro" : "🌑 Oscuro"}
-          </button>
+          <a href="/login" onClick={() => setMenuOpen(false)}>Iniciar Sesión</a>
+          <ThemeButton claro="☀️ Claro" oscuro="🌑 Oscuro"/>
         </div>
       )}
     </header>
