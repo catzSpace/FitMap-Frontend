@@ -28,11 +28,6 @@ const features = [
     title: "Gamificación",
     description: "Gana insignias por tu participación y esfuerzo en eventos deportivos."
   },
-  {
-    icon: <FaCalendarAlt />,
-    title: "Agenda Inteligente",
-    description: "Recibe recordatorios automáticos y sincroniza tus eventos deportivos con tu calendario."
-  },
 ];
 
 export default function FeaturesGrid() {
