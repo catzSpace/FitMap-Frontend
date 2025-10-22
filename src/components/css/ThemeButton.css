@@ -1,0 +1,30 @@
+.theme-toggle {
+  background: var(--toggle-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  padding-top: 2px;
+  font-size: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--hover);
+  transform: scale(1.13);
+}
+
+
+@media (max-width: 780px) {
+    .theme-toggle {
+        font-size: 1em;
+        font-weight: 500;
+        width: fit-content;
+        padding: 8px 14px;
+    }
+}

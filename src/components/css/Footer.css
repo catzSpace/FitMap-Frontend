@@ -25,7 +25,6 @@
   color: var(--text-muted, #9ca3af);
 }
 
-/* 📱 Responsive */
 @media (max-width: 600px) {
   .footer-links {
     flex-direction: column;

@@ -46,7 +46,6 @@
   font-size: 0.95rem;
 }
 
-/* 📱 Responsivo */
 @media (max-width: 840px) {
   .features-title {
     font-size: 1.8rem;

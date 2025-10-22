@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.signup-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.signup-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+  background: var(--header-bg);
+  box-shadow: 0 4px 15px var(--border);
+  padding: 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.signup-form__title {
+  font-size: 20px;
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.signup-form__signin {
+  font-size: 14px;
+  text-align: center;
+}
+
+.signup-form__signin a {
+  color: var(--text);
+  text-decoration: none;
+  transition: 0.3s;
+  margin-left: 5px;
+}
+
+.signup-form__signin a:hover {
+  color: #d116a1;
+}
+
+.signup-form__nombre {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.signup-form__group label {
+  position: relative;
+  display: block;
+}
+
+.signup-form__group label input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.signup-form__group label input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: var(--text);
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.signup-form__group label input:placeholder-shown + span {
+  top: 15px;
+  font-size: 0.9em;
+}
+
+.signup-form__group label input:focus + span,
+.signup-form__group label input:valid + span {
+  top: 30px;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.signup-form__group label input:valid + span {
+  color: #d116a1;
+}
+
+.signup-form__submit {
+  border: none;
+  outline: none;
+  background-color: aquamarine;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.4s ease;
+}
+
+.signup-form__submit:hover {
+  background: rgb(243, 48, 191);
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  color: transparent;
+}
+
+
+input[type="date"]:focus::-webkit-datetime-edit,
+input[type="date"]:valid::-webkit-datetime-edit {
+  color: var(--text);
+}

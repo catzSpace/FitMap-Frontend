@@ -1,0 +1,15 @@
+:root {
+  --header-bg: #ffffff;
+  --text: #1f2937;
+  --border: #d1d5db;
+  --hover: #f3f4f6;
+  --toggle-bg: #f9fafb;
+}
+
+.dark {
+  --header-bg: #111827;
+  --text: #f9fafb;
+  --border: #374151;
+  --hover: #1f2937;
+  --toggle-bg: #1e293b;
+}
