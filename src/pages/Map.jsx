@@ -14,6 +14,7 @@ import "./css/EventMenu.css";
 import GradientButtonSubmit from "../components/GradienButtonSubmit";
 import GradientButtonOnclick from "../components/GradienButtonOnClick";
 
+
 // Icono para indicar el punto en el mapa
 const customIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -95,7 +96,7 @@ function Map() {
 
           // un "ciclo for" para extraer cada uno de los eventos por separado
           const events = response.data.map((ev) => {
-            const ubicacion = JSON.parse(ev.ubicacion);
+            const ubicacion = ev.ubicacion
             return {
               id: ev.id,
               lat: ubicacion.lat,
