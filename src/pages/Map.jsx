@@ -85,8 +85,7 @@ function Map() {
   };
 
     // funcion para traer TODOS los datos de TODOS los ventos de la base de datos desde el back
-    useEffect(() => {
-      const fetchEvents = async () => {
+    const fetchEvents = async () => {
         if (!token) return;
 
         try {
@@ -120,7 +119,9 @@ function Map() {
           console.error("Error al obtener eventos:", error);
         }
       };
-
+    
+    // cargar los eventos al cargar el componente del mapa
+    useEffect(() => {
       fetchEvents();
     }, []);
 
@@ -203,6 +204,9 @@ function Map() {
       
       // se cierra el menu de creacion de eventos
       handleCloseMenu();
+
+      // cargar eventos nuevamente
+      fetchEvents();
 
     } catch (error) {
       console.error("Error al crear evento:", error);
