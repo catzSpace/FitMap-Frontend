@@ -6,6 +6,8 @@ import "./index.css";
 import ProtectedRouteUser from "./components/ProtectedRouteUser.jsx";
 import Login from "./pages/Login.jsx";
 import SignupForm from "./pages/SignupForm.jsx";
+import AdminPanel from "./pages/AdminPanel.jsx";
+import ProtectedRouteAdmin from "./components/ProtectedRouteAdmin.jsx";
 
 const App = () => {
   return (
@@ -20,7 +22,12 @@ const App = () => {
             <Map />
           </ProtectedRouteUser>
           }/>
-      </Routes>
+          <Route path="/admin/panel" element={
+            <ProtectedRouteAdmin>
+              <AdminPanel/>
+            </ProtectedRouteAdmin>
+          }></Route>
+        </Routes>
     </Router>
   );
 };

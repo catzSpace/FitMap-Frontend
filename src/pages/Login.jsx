@@ -10,6 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const api_base_url = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,22 +23,27 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5111/api/users/login", {
+      const response = await axios.post(`${api_base_url}/api/users/login`, {
         email,
         password,
       });
 
       const data = response.data;
-      console.log("Respuesta del servidor:", data);
+      // console.log("Respuesta del servidor:", data);
 
       alert("Inicio de sesión exitoso");
 
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.userId));
+        localStorage.setItem("rol", JSON.stringify(data.rol));
       }
 
-      navigate("/mapa");
+      if (data.rol == 1){
+        navigate("/admin/panel");
+      } else {
+        navigate("/mapa");
+      }
 
     } catch (error) {
       console.error("Error en el login:", error);

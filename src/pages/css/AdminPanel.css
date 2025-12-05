@@ -1,0 +1,170 @@
+/* Contenedor general */
+.items-section {
+  padding: 2rem;
+  background: var(--hover);
+  min-height: 80vh;
+  margin-top: 5em;
+}
+
+/* Tarjeta principal de solicitudes */
+.verification-section {
+  background: var(--header-bg);
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  max-width: 70%;
+  margin: 4em auto 0 auto;
+}
+
+/* Título */
+.verification-section h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+/* Ítem de solicitud */
+.request-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--toggle-bg);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+
+.request-item:hover {
+  background: var(--hover);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+/* Datos del usuario */
+.request-info p {
+  margin: 0;
+}
+
+.request-info .username {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.request-info .date {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 2px;
+}
+
+/* Contenedor de botones */
+.request-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Botón Ver PDF */
+.view-pdf-btn {
+  padding: 8px 16px;
+  background: var(--header-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text);
+  transition: background 0.2s ease;
+}
+
+.view-pdf-btn:hover {
+  background: var(--hover);
+}
+
+/* Botón de rechazar */
+.reject-btn {
+  background: #ffe5e5;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reject-btn:hover {
+  background: #ffcccc;
+}
+
+.reject-btn svg {
+  width: 20px;
+  height: 20px;
+  color: #d62828;
+}
+
+/* -------------------------- */
+/*      🌙 RESPONSIVE         */
+/* -------------------------- */
+
+/* Ocultar por defecto el botón "..." en desktop */
+.mobile-more-btn {
+  display: none;
+  background: var(--header-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* --- MODO MÓVIL --- */
+@media (max-width: 700px) {
+
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    position: relative;
+  }
+
+  .target-close{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  /* Botón ... visible en móvil */
+  .mobile-more-btn {
+    display: flex; 
+    align-self: flex-end;
+  }
+
+  .verification-section {
+    max-width: 100%;
+  }
+  /* Acciones ocultas inicialmente */
+  .request-actions {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  /* Cuando está activo (open) se muestra */
+  .request-actions.open {
+    display: flex;
+  }
+
+  /* Que los botones ocupen el ancho completo */
+  .request-actions button,
+  .request-actions .gradient-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

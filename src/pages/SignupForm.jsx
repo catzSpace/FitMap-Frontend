@@ -14,6 +14,7 @@ function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   const navigate = useNavigate();
+  const api_base_url = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +39,7 @@ function SignupForm() {
     };
 
     try {
-      const response = await axios.post("http://localhost:5111/api/users/create", datos);
+      const response = await axios.post(`${api_base_url}/api/users/create`, datos);
       const data = response.data;
       console.log("Respuesta del servidor:", data);
 

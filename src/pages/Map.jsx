@@ -13,6 +13,7 @@ import IslandHeader from "../components/IslandHeader";
 import "./css/EventMenu.css";
 import GradientButtonSubmit from "../components/GradienButtonSubmit";
 import GradientButtonOnclick from "../components/GradienButtonOnClick";
+import EventDetailPopup from "../components/EventDetailsPopup.jsx";
 
 
 // Icono para indicar el punto en el mapa
@@ -44,6 +45,10 @@ function Map() {
   // JWS para ver cual es el usuario que inició sesión en ese momento
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
+  const rol = localStorage.getItem("rol");
+  const today = new Date().toISOString().split("T")[0];
+  const api_base_url = import.meta.env.VITE_API_URL;
+
 
   // Marcador inicial, con esto el mapa inicia en el centro de tulua (mas o menos)
   const [markers, setMarkers] = useState([
@@ -54,7 +59,10 @@ function Map() {
   // y el estado de los menus
   const [showMenu, setShowMenu] = useState(false);
   const [eventos, setEventos] = useState([]);
+  const [deportes, setDeportes] = useState([]);
+  const [logUser, setLogUser] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -64,11 +72,46 @@ function Map() {
     direccion: "",
   });
 
+  const getUserFromToken = async (user) => {
+     try {
+      const response = await axios.post(
+        `${api_base_url}/api/users/profile`,
+        {user},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLogUser(response.data);
+    } catch (error) {
+        console.error("Error al obtener el perfil del usuario:", error);
+        return null;
+    }
+  };
+
+  const getSport = async () => {
+     try {
+      const response = await axios.get(
+        `${api_base_url}/api/events/sports`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDeportes(response.data[0]);
+    } catch (error) {
+        console.error("Error al obtener el perfil del usuario:", error);
+        return null;
+    }
+  };
+
   // funcion asincrona (en paralelo) para permitirle a un usuarion inscribirse a un evento
   const handleJoinEvent = async (id_evento) => {
     try {
       const response = await axios.post(
-        "http://localhost:5111/api/events/join",
+        `${api_base_url}/api/events/join`,
         { id_evento },
         {
           headers: {
@@ -89,8 +132,10 @@ function Map() {
         if (!token) return;
 
         try {
-          const response = await axios.get("http://localhost:5111/api/events/all", {
-            headers: { Authorization: `Bearer ${token}` },
+          const response = await axios.get(`${api_base_url}/api/events/all`, {
+            headers: { Authorization: `Bearer ${token}`,
+                      'ngrok-skip-browser-warning': '69420'
+            },
           });
 
           // un "ciclo for" para extraer cada uno de los eventos por separado
@@ -107,6 +152,7 @@ function Map() {
               hora: ev.hora,
               direccion: ubicacion.direccion,
               id_organizador: ev.id_organizador,
+              nombre_organizador: ev.nombre_organizador,
             };
           });
 
@@ -128,8 +174,13 @@ function Map() {
 
   // al dar click, en el mapa se muestra el menu para crear un evento
   const handleAddMarker = (latlng) => {
-    setSelectedLocation(latlng);
-    setShowMenu(true);
+    if (rol == 3){
+      setSelectedLocation(latlng);
+      setShowMenu(true);
+    } else {
+      alert("verifica tu cuenta para crear eventos");
+    }
+    
   };
 
   // los datos que se van a extraer del menu para crear eventos
@@ -183,7 +234,7 @@ function Map() {
     // junto con los datos que se requieren para esto
     try {
       const response = await axios.post(
-        "http://localhost:5111/api/events/create",
+        `${api_base_url}/api/events/create`,
         nuevoEvento,
         {
           headers: {
@@ -214,10 +265,20 @@ function Map() {
     }
   };
 
+   useEffect(() => {
+      fetchEvents();
+      getUserFromToken(user);
+      getSport();
+  }, []);
 
   return (
     <>
-      <IslandHeader eventos={eventos}/>
+      <IslandHeader 
+        eventos={eventos} 
+        handleJoinEvent={handleJoinEvent}
+        owner={user}
+        logUser={logUser}
+      />
 
       <MapContainer
         center={[4.0853, -76.197]}
@@ -231,25 +292,21 @@ function Map() {
         />
 
         {markers.map((m, i) => (
-          <Marker key={i} position={[m.lat, m.lng]} icon={customIcon}>
-            <Popup>
-              <div>
-                <h3>{m.nombre}</h3>
-                <p><strong>Deporte:</strong> {m.deporte}</p>
-                <p><strong>Descripción:</strong> {m.descripcion}</p>
-                <p><strong>Fecha:</strong> {m.fecha}</p>
-                <p><strong>Hora:</strong> {m.hora}</p>
-                <p><strong>Dirección:</strong> {m.direccion}</p>
-                {(m.id_organizador !== user) && 
-                <GradientButtonOnclick nombre={"Unirme"} func={() => handleJoinEvent(m.id)}/>}
-              </div>
-            </Popup>
-          </Marker>
+          <Marker key={i} position={[m.lat, m.lng]} icon={customIcon}  eventHandlers={{click: () => setSelectedEvent(m),}}/>
         ))}
 
 
         <AddMarkerEvent onAdd={handleAddMarker} />
       </MapContainer>
+
+      {selectedEvent && (
+        <EventDetailPopup
+          evento={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+          onJoin={handleJoinEvent}
+          isOwner={selectedEvent.id_organizador === user}
+        />
+      )}
 
       {/* Menú inferior */}
       {showMenu && (
@@ -272,13 +329,12 @@ function Map() {
             />
 
             <label>Deporte</label>
-            <input
-              type="text"
-              name="deporte"
-              value={formData.deporte}
-              onChange={handleChange}
-              required
-            />
+            <select name="deporte" required onChange={handleChange}>
+              <option value="" disabled selected>-- Selecciona un deporte --</option>
+              {deportes.map((m,i) => (
+                <option value={m.nombre}>{m.nombre}</option>
+              ))}
+            </select>
 
             <label>Descripción</label>
             <textarea
@@ -297,6 +353,7 @@ function Map() {
                   value={formData.fecha}
                   onChange={handleChange}
                   required
+                  min={today}
                 />
               </div>
               <div>
