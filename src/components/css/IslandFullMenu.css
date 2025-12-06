@@ -96,6 +96,7 @@
   background: var(--toggle-bg);
   width: 100%;
   max-width: 280px;
+  margin-top: 1em;
 }
 
 .user-avatar {

@@ -7,7 +7,7 @@
   align-items: center;
   padding: 0.8rem 0;
   z-index: 10000;
-  transform: translateY(4.8em);
+  transform: translateY(5em);
   animation: dropFade 0.18s ease-out;
 }
 

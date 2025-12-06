@@ -89,6 +89,7 @@ function Map() {
         }
       );
       setLogUser(response.data);
+      localStorage.setItem('rol', response.data.id_rol);
     } catch (error) {
         console.error("Error al obtener el perfil del usuario:", error);
         return null;
@@ -182,8 +183,6 @@ function Map() {
     if (rol == 3){
       setSelectedLocation(latlng);
       setShowMenu(true);
-    } else {
-      alert("verifica tu cuenta para crear eventos");
     }
     
   };
@@ -248,7 +247,6 @@ function Map() {
         }
       );
 
-      console.log("Evento creado:", response.data);
       alert("Evento creado con éxito 🎉");
 
       // Una vez que se crea el evento, se crea el nuevo marcador para indicarlo

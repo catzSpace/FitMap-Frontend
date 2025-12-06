@@ -48,6 +48,7 @@ function SignupForm() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.userId));
+        localStorage.setItem("rol", JSON.stringify(data.rol));
       }
 
       navigate("/mapa");

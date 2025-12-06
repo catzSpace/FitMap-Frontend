@@ -20,6 +20,16 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
 
   const api_base_url = import.meta.env.VITE_API_URL;
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file && file.type !== "application/pdf") {
+      alert("Solo se permiten archivos PDF");
+      e.target.value = "";
+    }
+  };
+
+
   return (
       <div className="full-menu slide-up">
       <div className="menu-header">
@@ -97,7 +107,8 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
               display: isVerify ? 'block' : 'none',
             }}
           >
-            <h3 style={{ fontSize: "14px", marginBottom: "6px" }}>Solicitar Verificación</h3>
+            <h3 style={{ fontSize: "1.5em", marginBottom: "6px" }}>Solicitar Verificación</h3>
+            <p>si deseas empezar a crear eventos por favor verifica tu cuenta</p>
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
@@ -142,6 +153,7 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
                   marginBottom: "6px",
                   width: "100%",
                 }}
+                onChange={handleFileChange}
               />
               <GradientButtonSubmit nombre="Solicitar Verificacion"/>
             </form>
