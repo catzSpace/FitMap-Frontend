@@ -63,6 +63,10 @@ function Map() {
   const [logUser, setLogUser] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedSport, setSelectedSport] = useState(
+    localStorage.getItem("selectedSport") || ""
+  );
+
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -80,6 +84,7 @@ function Map() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': '69420'
           },
         }
       );
@@ -97,6 +102,7 @@ function Map() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': '69420'
           },
         }
       );
@@ -113,9 +119,11 @@ function Map() {
       const response = await axios.post(
         `${api_base_url}/api/events/join`,
         { id_evento },
+        
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': '69420'
           },
         }
       );
@@ -166,10 +174,7 @@ function Map() {
         }
       };
     
-    // cargar los eventos al cargar el componente del mapa
-    useEffect(() => {
-      fetchEvents();
-    }, []);
+
 
 
   // al dar click, en el mapa se muestra el menu para crear un evento
@@ -265,11 +270,44 @@ function Map() {
     }
   };
 
-   useEffect(() => {
-      fetchEvents();
-      getUserFromToken(user);
-      getSport();
+  useEffect(() => {
+    const loadInitialFilter = () => {
+      let _sport = localStorage.getItem("selectedSport") || "";
+      let sport = _sport.replace("_", "");
+      setSelectedSport(sport);
+    };
+
+    // Cargar al inicio
+    loadInitialFilter();
+
+    // Escuchar cuando el select cambie
+    const listener = () => {
+      let _sport = localStorage.getItem("selectedSport") || "";
+      let sport = _sport.replace("_", "");
+      setSelectedSport(sport);
+    };
+
+    window.addEventListener("sportFilterChanged", listener);
+
+    fetchEvents();
+    getSport();
+    getUserFromToken(user);
+
+    return () => {
+      window.removeEventListener("sportFilterChanged", listener);
+    };
   }, []);
+
+
+
+  useEffect(() => {
+    if (selectedSport === "" || selectedSport === "all") {
+      setMarkers(eventos);
+    } else {
+      setMarkers(eventos.filter(ev => ev.deporte === selectedSport));
+    }
+  }, [selectedSport, eventos]);
+
 
   return (
     <>
