@@ -6,6 +6,7 @@ import UserIcon from "../icons/User";
 import { useState } from "react";
 import GradientButtonSubmit from "./GradienButtonSubmit";
 import axios from "axios";
+import LogOut from "./LogOut";
 
 function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
   const rol = localStorage.getItem("rol");
@@ -159,6 +160,7 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
             </form>
           </div>
           : null}
+          <LogOut/>
         </div>
       </div>
     </div>

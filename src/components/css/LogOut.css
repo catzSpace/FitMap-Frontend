@@ -1,0 +1,18 @@
+.reject-btn {
+    width: 70%;
+    height: 4vh;
+    margin-top: 3em;
+    background: #ffe5e5;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.reject-btn:hover {
+    background: #ffcccc;
+}
+
+.reject-btn p {
+    color: #d62828;
+}
