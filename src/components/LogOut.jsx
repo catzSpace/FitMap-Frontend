@@ -23,7 +23,7 @@ function LogOut() {
     };
 
   return (
-        <button className="reject-btn" onClick={() => handleLogout()}>
+        <button className="logout-btn" onClick={() => handleLogout()}>
             <p>Cerrar Sesion</p>
         </button>
   );

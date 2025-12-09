@@ -1,7 +1,7 @@
-.reject-btn {
-    width: 70%;
+.logout-btn {
+    width: 10em;
     height: 4vh;
-    margin-top: 3em;
+    border: none;
     background: #ffe5e5;
     padding: 8px;
     border-radius: 10px;
@@ -9,10 +9,10 @@
     transition: background 0.2s ease;
 }
 
-.reject-btn:hover {
+.logout-btn:hover {
     background: #ffcccc;
 }
 
-.reject-btn p {
+.logout-btn p {
     color: #d62828;
 }

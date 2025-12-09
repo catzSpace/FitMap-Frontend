@@ -24,6 +24,10 @@
   }
 }
 
+.cont-logout-btn{
+  margin-top: 3em;
+}
+
 .menu-header {
   display: flex;
   justify-content: flex-end;

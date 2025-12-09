@@ -123,6 +123,7 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
 
                 const formData = new FormData();
                 formData.append("document", file);
+                formData.append("user", logUser.nombres)
 
                 try {
                   const token = localStorage.getItem("token");
@@ -160,7 +161,9 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
             </form>
           </div>
           : null}
-          <LogOut/>
+          <div className="cont-logout-btn">
+              <LogOut/>
+          </div>
         </div>
       </div>
     </div>

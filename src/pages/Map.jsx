@@ -366,7 +366,7 @@ function Map() {
 
             <label>Deporte</label>
             <select name="deporte" required onChange={handleChange}>
-              <option value="" disabled selected>-- Selecciona un deporte --</option>
+              <option value="">-- Selecciona un deporte --</option>
               {deportes.map((m,i) => (
                 <option value={m.nombre}>{m.nombre}</option>
               ))}
