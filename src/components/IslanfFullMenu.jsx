@@ -65,6 +65,31 @@ function IslandFullMenu({ onClose, eventos, onjoin, onCancel, owner, logUser }) 
     }
   };
 
+  const eliminarEvento = async (eventId) => {
+    const confirmar = confirm("¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.");
+
+    if (!confirmar) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${api_base_url}/api/events/${eventId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setMisEventos(prev => prev.filter(ev => ev.id !== eventId));
+
+      if (eventoActivo === eventId) {
+        setEventoActivo(null);
+      }
+
+      alert("Evento eliminado correctamente ✔️");
+
+    } catch (error) {
+      console.error("Error eliminando evento:", error);
+      alert("❌ No se pudo eliminar el evento.");
+    }
+  };
 
 
 
@@ -174,18 +199,41 @@ function IslandFullMenu({ onClose, eventos, onjoin, onCancel, owner, logUser }) 
 
                   {eventoActivo === event.id && (
                     <div className="event-details">
-                      <p><strong>Descripción:</strong> {event.descripcion}</p>
-                      <p><strong>Lugar:</strong> {event.ubicacion.direccion}</p>
-
-                      <h4>Participantes</h4>
                       <br />
-                      <ul>
-                        {(participantes[event.id] || []).map(p => (
-                          <li key={p.id}>
-                            {p.nombres} — {p.email}
-                          </li>
-                        ))}
-                      </ul>
+                      <h4 style={{ color: "#9333ea" }}>Participantes</h4>
+                      <br />
+
+                      {(!participantes[event.id] || participantes[event.id].length === 0) ? (
+                        <p style={{ color: "#777" }}>&nbsp; &nbsp; No hay nadie inscrito aún.</p>
+                      ) : (
+                        <ul>
+                          {participantes[event.id].map(p => (
+                            <li style={{listStyleType: "none"}} key={p.id}>
+                              {p.nombres} — {p.email}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <button 
+                        style={{
+                          marginTop: "20px",
+                          background: "#e63946",
+                          color: "white",
+                          border: "none",
+                          padding: "10px 15px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontWeight: "bold"
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          eliminarEvento(event.id);
+                        }}
+                      >
+                        Eliminar evento
+                      </button>
+
                     </div>
                   )}
                 </li>

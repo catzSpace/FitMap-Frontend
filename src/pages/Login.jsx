@@ -94,6 +94,8 @@ function Login() {
             nombre={loading ? "Cargando..." : "Login"}
             disabled={loading}
           />
+
+          <p>aun no tienes una cuenta?<a href="/registro">Registrate!</a></p>
         </form>
       </div>
     </>
