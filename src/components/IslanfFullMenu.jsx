@@ -3,17 +3,20 @@ import ThemeButton from "./ThemeButton";
 import GradientButtonOnclick from "./GradienButtonOnClick";
 import CheckIcon from "../icons/Check";
 import UserIcon from "../icons/User";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GradientButtonSubmit from "./GradienButtonSubmit";
 import axios from "axios";
 import LogOut from "./LogOut";
 
-function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
+function IslandFullMenu({ onClose, eventos, onjoin, onCancel, owner, logUser }) {
   const rol = localStorage.getItem("rol");
   let verify = (rol == 2) ? true : false
   const [eventoActivo, setEventoActivo] = useState(null);
   const [eventSelected, setEventSelected] = useState(null);
   const [isVerify, setIsVerify] = useState(verify);
+  const [misEventos, setMisEventos] = useState([]);
+  const [participantes, setParticipantes] = useState({});
+
   const toggleEvento = (id) => {
     setEventoActivo(eventoActivo === id ? null : id);
     setEventSelected(eventos.find(event => event.id === id));
@@ -29,6 +32,40 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
       e.target.value = "";
     }
   };
+
+  useEffect(() => {
+    const fetchMyEvents = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${api_base_url}/api/events/user/${logUser.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMisEventos(response.data);
+      } catch (err) {
+        console.error("Error cargando mis eventos:", err);
+      }
+    };
+
+    fetchMyEvents();
+  }, []);
+
+  const cargarParticipantes = async (eventId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${api_base_url}/api/events/${eventId}/participantes`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setParticipantes(prev => ({
+        ...prev,
+        [eventId]: response.data
+      }));
+    } catch (err) {
+      console.error("Error cargando participantes:", err);
+    }
+  };
+
+
 
 
   return (
@@ -63,20 +100,40 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
                     </div>
 
                     <p><strong>Descripción:</strong> {event.descripcion}</p>
+                    <p><strong>Cupos:</strong> {(event.cupos_restantes == -1) ? 'ilimitado' : event.cupos_restantes}</p>
+                    <p><strong>Requisitos:</strong> {event.requisitos}</p>
+                    <p><strong>Costos:</strong> {event.costos}</p>
                     <p><strong>Fecha:</strong> {event.fecha}</p>
                     <p><strong>Hora:</strong> {event.hora}</p>
                     <p><strong>Dirección:</strong> {event.direccion}</p>
                     <br />
+
                     {owner !== event.id_organizador && (
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
                       >
-                        <GradientButtonOnclick
-                          nombre="Unirme al evento"
-                          func={() => onjoin(event.id)}
-                        />
+                        {event.estas_inscrito ? (
+                          <GradientButtonOnclick
+                            nombre="Cancelar inscripción"
+                            func={() => onCancel(event.id)}
+                          />
+                        ) : (event.cupos_restantes > 0 || event.cupos_restantes === -1) ? (
+                          <GradientButtonOnclick
+                            nombre="Unirme al evento"
+                            func={() => onjoin(event.id)}
+                          />
+                        ) : (
+                          <p style={{ 
+                            color: "#9a9a9a", 
+                            fontSize: "14px", 
+                            marginTop: "10px",
+                            textAlign: "center" 
+                          }}>
+                            Sin cupos
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -95,6 +152,48 @@ function IslandFullMenu({ onClose, eventos, onjoin, owner, logUser }) {
             <p><strong>Correo:</strong> {logUser.email}</p>
             {!isVerify ? <CheckIcon className="verified-icon"/> : null}
           </div>
+
+          <div className="my-events-section">
+            <br />
+            <h2>Mis eventos</h2>
+            <br />
+            <ul className="event-list">
+
+              {misEventos.map(event => (
+                <li
+                  key={event.id}
+                  onClick={() => {
+                    toggleEvento(event.id);
+                    cargarParticipantes(event.id);
+                  }}
+                  className={`event-item ${eventoActivo === event.id ? "activo" : ""}`}
+                >
+                  <div className="event-header">
+                    <strong>{event.nombre}</strong> - {event.fecha}
+                  </div>
+
+                  {eventoActivo === event.id && (
+                    <div className="event-details">
+                      <p><strong>Descripción:</strong> {event.descripcion}</p>
+                      <p><strong>Lugar:</strong> {event.ubicacion.direccion}</p>
+
+                      <h4>Participantes</h4>
+                      <br />
+                      <ul>
+                        {(participantes[event.id] || []).map(p => (
+                          <li key={p.id}>
+                            {p.nombres} — {p.email}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </li>
+              ))}
+
+            </ul>
+          </div>
+
 
 
           {isVerify ? 

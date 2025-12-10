@@ -96,6 +96,22 @@ function Map() {
     }
   };
 
+  const handleCancelEvent = async (id_evento) => {
+    try {
+      await axios.delete(`${api_base_url}/api/events/${id_evento}/cancelar`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      alert('Inscripcion cancelada')
+      window.location.reload();
+
+    } catch (error) {
+      console.error("Error al cancelar inscripción:", error);
+      alert("Error al cancelar la inscripción");
+    }
+  };
+
+
   const getSport = async () => {
      try {
       const response = await axios.get(
@@ -130,6 +146,7 @@ function Map() {
       );
 
       alert("Inscripción exitosa ✅");
+      window.location.reload();
     } catch (error) {
       console.error("Error al unirse al evento:", error);
       alert(error.response?.data?.message || "Error al unirse al evento");
@@ -162,6 +179,10 @@ function Map() {
               direccion: ubicacion.direccion,
               id_organizador: ev.id_organizador,
               nombre_organizador: ev.nombre_organizador,
+              cupos_restantes: ev.cupos,
+              estas_inscrito: ev.estas_inscrito,
+              requisitos: ev.requisitos,
+              costos: ev.costos,
             };
           });
 
@@ -226,6 +247,9 @@ function Map() {
       fecha: formData.fecha,
       hora: formData.hora,
       descripcion: formData.descripcion,
+      costos: formData.costos,
+      cupos: formData.cupos,
+      requisitos: formData.requisitos,
       deporte: formData.deporte,
       ubicacion: JSON.stringify({
         lat: selectedLocation.lat,
@@ -312,6 +336,7 @@ function Map() {
       <IslandHeader 
         eventos={eventos} 
         handleJoinEvent={handleJoinEvent}
+        handleCancelEvent={handleCancelEvent}
         owner={user}
         logUser={logUser}
       />
@@ -340,8 +365,12 @@ function Map() {
           evento={selectedEvent}
           onClose={() => setSelectedEvent(null)}
           onJoin={handleJoinEvent}
+          onCancel={handleCancelEvent}
           isOwner={selectedEvent.id_organizador === user}
+          isJoined={selectedEvent.estas_inscrito}
+          availableSlots={selectedEvent.cupos_restantes}
         />
+
       )}
 
       {/* Menú inferior */}
@@ -378,6 +407,30 @@ function Map() {
               value={formData.descripcion}
               onChange={handleChange}
               rows={3}
+            />
+
+            <label>cupos (opcional)</label>
+            <input
+              type="number"
+              name="cupos"
+              value={formData.cupos}
+              onChange={handleChange}
+            />
+
+            <label>costos (opcional)</label>
+            <input
+              type="number"
+              name="costos"
+              value={formData.costos}
+              onChange={handleChange}
+            />
+
+            <label>requisitos (opcional)</label>
+            <input
+              type="text"
+              name="requisitos"
+              value={formData.requisitos}
+              onChange={handleChange}
             />
 
             <div className="double-input">

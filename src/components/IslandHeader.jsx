@@ -10,7 +10,7 @@ import Close from "../icons/Close";
 import axios from "axios";
 import NotificationsMenu from "./NotificationsMenu";
 
-function IslandHeader({ eventos, handleJoinEvent, owner, logUser }) {
+function IslandHeader({ eventos, handleJoinEvent, handleCancelEvent, owner, logUser }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notMenuOpen, setNotMenuOpen] = useState(false);
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
@@ -28,7 +28,6 @@ function IslandHeader({ eventos, handleJoinEvent, owner, logUser }) {
         },
       });
       setUnreadNotifications(response.data.count);
-      console.log(unreadNotifications);
     } catch (error) {
       console.error("Error al obtener notificaciones no leídas:", error);
     }
@@ -93,6 +92,7 @@ function IslandHeader({ eventos, handleJoinEvent, owner, logUser }) {
           onClose={() => setMenuOpen(false)}
           eventos={eventos}
           onjoin={handleJoinEvent}
+          onCancel={handleCancelEvent}
           owner={owner}
           logUser={logUser}
         />

@@ -8,6 +8,7 @@ import Login from "./pages/Login.jsx";
 import SignupForm from "./pages/SignupForm.jsx";
 import AdminPanel from "./pages/AdminPanel.jsx";
 import ProtectedRouteAdmin from "./components/ProtectedRouteAdmin.jsx";
+import AdminPanelReport from "./pages/AdminPanelReport.jsx";
 
 const App = () => {
   return (
@@ -25,6 +26,11 @@ const App = () => {
           <Route path="/admin/panel" element={
             <ProtectedRouteAdmin>
               <AdminPanel />
+            </ProtectedRouteAdmin>
+          }></Route>
+          <Route path="/admin/panel/reports" element={
+            <ProtectedRouteAdmin>
+              <AdminPanelReport />
             </ProtectedRouteAdmin>
           }></Route>
         </Routes>

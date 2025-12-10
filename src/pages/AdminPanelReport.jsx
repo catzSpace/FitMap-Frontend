@@ -7,7 +7,7 @@ import LogOut from "../components/LogOut";
 import axios from "axios";
 import GradientButtonOnclick from "../components/GradienButtonOnClick";
 
-const AdminPanel = () => {
+const AdminPanelReport = () => {
   const [openId, setOpenId] = useState(null);
   const [solicitudes, setSolicitudes] = useState([]);
   const api_base_url = import.meta.env.VITE_API_URL;
@@ -94,16 +94,16 @@ const AdminPanel = () => {
         <div className="post-header">
           <h2>Panel de Administración</h2>
           <div>
-            <a href="/admin/panel/reports">ver reportes</a>
+            <a href="/admin/panel">ver solicitudes de verificacion</a>
             <LogOut />
           </div>
         </div>
 
         <section className="verification-section">
-          <h3>Solicitudes de Verificación</h3>
+          <h3>Reportes</h3>
           <div>
             {solicitudes.length === 0 ? (
-              <p>No hay solicitudes de verificacion actualmente</p>
+              <p>No hay reportes actualmente</p>
             ) : (
               solicitudes.map((req) => (
               <div key={req.id} className="request-item">
@@ -142,4 +142,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default AdminPanelReport;
