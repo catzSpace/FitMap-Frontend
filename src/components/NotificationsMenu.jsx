@@ -49,7 +49,11 @@ function NotificationsMenu({ onClose, logUser }) {
                     <strong>{noti.mensaje}</strong>
                   </div>
 
-                  <p><strong>Enviado por:</strong> {noti.id_user_register ? noti.id_user_register : "admin"}</p>
+                  {!noti.id_user_register ? (
+                    <p><strong>Enviado por:</strong> admin</p>
+                  ) : (
+                    <span></span>
+                  )}
                 </li>
               ))
             )}

@@ -22,12 +22,12 @@ function IslandHeader({ eventos, handleJoinEvent, handleCancelEvent, owner, logU
   const fetchUnreadNotifications = async () => {
 
     try {
-      const response = await axios.get(`${api_base_url}/api/users/notifications/unread`, {
+      const response = await axios.get(`${api_base_url}/api/users/notifications`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUnreadNotifications(response.data.count);
+      setUnreadNotifications(response.data);
     } catch (error) {
       console.error("Error al obtener notificaciones no leídas:", error);
     }
@@ -42,7 +42,7 @@ function IslandHeader({ eventos, handleJoinEvent, handleCancelEvent, owner, logU
     <>
       <header className="island-header">
         <div className="island-container">
-          {unreadNotifications  <= 0 ? (
+          {unreadNotifications == 0 ? (
             <button
               className="island-btn center-btn"
               onClick={() => setNotMenuOpen(!notMenuOpen)}
